@@ -1,5 +1,8 @@
 pandas
 numpy
 google-cloud-storage
-scikit-
+scikit-Learn
 pyyaml
+matplotlib
+seaborn
+imbalanced-learn

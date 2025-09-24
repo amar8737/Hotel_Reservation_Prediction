@@ -1,3 +1,4 @@
+# src/logger.py
 import logging
 import os
 from datetime import datetime
@@ -18,4 +19,5 @@ def get_logger(name):
     return logger
 
 if __name__ == "__main__":
+    logger = get_logger(__name__)
     logger.info("Logger is set up and ready to use.")
