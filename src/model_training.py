@@ -17,6 +17,8 @@ from sklearn.metrics import accuracy_score, precision_score,f1_score, recall_sco
 from sklearn.model_selection import RandomizedSearchCV
 from utils.common_functions import load_data, read_yaml
 from scipy.stats import uniform, randint
+import mlflow
+import mlflow.sklearn
 
 
 logger = get_logger(__name__)
@@ -150,13 +152,24 @@ class ModelTrainer:
             target_column: The target column for prediction.
         """
         try:
-            logger.info("Starting model training...")
-            params = read_yaml(CONFIG_FILE_PATH)
-            target_column = params['data_processing']['target_column']
-            X_train, y_train, X_test, y_test, label_encoder = self.load_and_split_data(target_column)
-            model = self.train_lgbm(X_train, y_train)
-            self.evaluate_model(model, X_test, y_test, label_encoder)
-            self.save_artifact(model, label_encoder)
+            with mlflow.start_run():
+                logger.info("Starting model training...")
+                params = read_yaml(CONFIG_FILE_PATH)
+                target_column = params['data_processing']['target_column']
+                X_train, y_train, X_test, y_test, label_encoder = self.load_and_split_data(target_column)
+                model = self.train_lgbm(X_train, y_train)
+                metrics = self.evaluate_model(model, X_test, y_test, label_encoder)
+                self.save_artifact(model, label_encoder)
+                mlflow.sklearn.log_model(model, "model")
+                mlflow.log_param("model_type", "LightGBM")
+                mlflow.log_artifacts(CONFIG_FILE_PATH, artifact_path="config")  
+                mlflow.log_artifacts(self.processed_train_path, artifact_path="data")  
+                mlflow.log_artifacts(self.processed_test_path, artifact_path="data")
+                mlflow.log_artifact(self.model_output_path)
+                mlflow.log_artifact(self.label_encoder_path)
+                mlflow.log_params(model.get_params())
+                mlflow.log_metrics(metrics)
+                logger.info("Model training pipeline completed successfully.")
         except Exception as e:
             logger.error(f"Error in model training pipeline: {e}")
             raise CustomException("Failed to run model training pipeline", e)
