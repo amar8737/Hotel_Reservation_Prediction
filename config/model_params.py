@@ -1,6 +1,6 @@
 from scipy.stats import uniform, randint
 
-LightGBM_PARAMS = {
+LIGHTGBM_PARAMS = {
     'num_leaves': randint(20, 150),
     'max_depth': randint(5, 50),
     'learning_rate': uniform(0.01, 0.2),
@@ -35,10 +35,11 @@ RF_PARAMS = {
 }
 
 RANDOM_SEARCH_PARAMS = {
-    'n_iter': 10,
+    'n_iter': 2,
     'scoring': 'f1',
     'cv': 4,
     'verbose': 1,
     'random_state': 42,
-    'n_jobs': -1
+    'n_jobs': 4,
+    'scoring': 'f1'  # Ensure scoring is set to 'f1'
 }

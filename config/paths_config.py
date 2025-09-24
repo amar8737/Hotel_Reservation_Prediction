@@ -17,4 +17,4 @@ PROCESSED_TRAIN_FILE_PATH = os.path.join(PROCESSED_DIR,"processed_train.csv")
 PROCESSED_TEST_FILE_PATH = os.path.join(PROCESSED_DIR,"processed_test.csv")
 
 ################# MODEL TRAINING ##################
-MODEL_DIR = "artifacts/model/lgbm_model.pkl"
+MODEL_DIR = "artifacts/model"
