@@ -12,7 +12,6 @@ data_processing:
     - market_segment_type
     - required_car_parking_space
     - room_type_reserved
-    - market_segment_type
     - repeated_guest
   numerical_features:
     - no_of_adults

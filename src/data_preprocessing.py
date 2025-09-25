@@ -74,6 +74,8 @@ class DataPreprocessor:
             for col in cat_cols:
                 if col in df.columns:
                     df[col] = self.label_encoder.fit_transform(df[col])
+                    mapping = {label: index for index, label in enumerate(self.label_encoder.classes_)}
+                    logger.info(f"--> Mapping for '{col}': {mapping}")
             
             # ✅ FIX: The problematic .map() loop has been removed.
 
